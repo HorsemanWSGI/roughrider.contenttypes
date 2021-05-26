@@ -28,24 +28,19 @@ class ActionRegistry(ABCMeta):
         return super().__new__(mcls, name, bases, namespace)
 
 
-class Metadata(NamedTuple):
+class Content(UserDict, metaclass=ActionRegistry):
     id: str
     title: str
     date: datetime
     state: str
-
-
-class Content(UserDict, metaclass=ActionRegistry):
-    metadata: Metadata
     actions: ClassVar[Actions]
 
     def __init__(self, data):
-        self.metadata = self.get_metadata(data)
         super().__init__(data)
+        self.set_metadata(data)
 
-    @staticmethod
     @abstractmethod
-    def get_metadata(data: Dict) -> Metadata:
+    def set_metadata(data: Dict):
         raise NotImplementedError('Override in your class.')
 
     @classmethod
