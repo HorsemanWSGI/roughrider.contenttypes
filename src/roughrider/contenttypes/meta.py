@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from datetime import datetime
 from collections import UserDict, OrderedDict
 from typing import Dict, NamedTuple, Type, Optional, Callable, ClassVar
@@ -35,13 +35,9 @@ class Content(UserDict, metaclass=ActionRegistry):
     state: str
     actions: ClassVar[Actions]
 
-    def __init__(self, data):
-        super().__init__(data)
-        self.set_metadata(data)
-
-    @abstractmethod
-    def set_metadata(data: Dict):
-        raise NotImplementedError('Override in your class.')
+    @property
+    def date(self):
+        return self['creation_date']
 
     @classmethod
     def create(cls, data: Dict):
